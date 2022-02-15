@@ -1,0 +1,78 @@
+import os
+import glob
+cook_book = {}
+cook_book_new = {}
+new_list = {}
+name = ''
+new_name = ''
+index1 = 0
+index2 = 0
+
+def get_shop_list_by_dishes(name, person_count):
+    cook_book_new = {}
+    for line in name:
+        if name.count(line) == 1:
+            for key, value in cook_book.items():
+                if line == key:
+                    # print(value)
+                    for lines in value:
+                        name1 = lines['ingredient_name']
+                        name2 = lines['measure']
+                        name3 = person_count * int(lines['quantity'])
+                        cook_book_new[name1] = {'measure':name2, 'quantity': name3}
+        else:
+            if name.count(line) > 1:
+                for key, value in cook_book.items():
+                    if line == key:
+                        # print(value)
+                        for lines in value:
+                            name1 = lines['ingredient_name']
+                            name2 = lines['measure']
+                            name3 = int(name.count(line)) * int(lines['quantity'])
+                            cook_book_new[name1] = {'measure': name2, 'quantity': name3}
+    print(cook_book_new)
+
+file = os.path.join(os.getcwd(),'data.txt')
+with open(file, encoding='utf-8') as f:
+    for lin in f:
+        list_menu = []
+        # name_key = lin
+        # print(name_key)
+        pieces = int(f.readline().strip())
+        # print(pieces)
+        for line in range(1, pieces+1):
+            name = f.readline()
+            # print(name)
+            index1 = name.find('|',1)
+            index2 = name.find('|', index1+1)
+            list_menu.append({'ingredient_name': name[0:index1], 'quantity': name[index1+2:index2], 'measure': name[index2+2:-1]})
+        cook_book[lin[0:-1]] = list_menu
+        f.readline()
+    print(cook_book)
+
+get_shop_list_by_dishes ([ 'Утка по-пекински', 'Омлет' ], 2)
+get_shop_list_by_dishes ([ 'Омлет', 'Омлет' ], 1)
+
+print("Текущая деректория:", os.getcwd())
+list_txt = []
+r_file_txt1 = open('1.txt', 'rb').read().splitlines()
+r_file_txt1_index = 0
+min_len = len(r_file_txt1)
+for filename in glob.glob('*txt'):
+    list_txt.append(filename)
+print('До сортировки файлов по количеству строк:', list_txt)
+for name_txt in range(0, len(list_txt)):
+    txt = []
+    file_path = os.path.join(os.getcwd(), list_txt[name_txt])
+    r_file = open(list_txt[name_txt], 'rb').read().splitlines()
+    if len(r_file) < min_len:
+        txt.append(list_txt[r_file_txt1_index])
+        list_txt[r_file_txt1_index] = list_txt[name_txt]
+        list_txt[name_txt] = txt[0]
+print('После сортировки файлов по количеству строк:',list_txt)
+for name_txt in range(0, len(list_txt)):
+    print(list_txt[name_txt])
+    print(len(open(list_txt[name_txt], 'rb').read().splitlines()))
+    with open(list_txt[name_txt], encoding='utf-8') as file:
+        for line in file:
+            print(line.strip())
