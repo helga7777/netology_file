@@ -1,12 +1,7 @@
 import os
 import glob
+
 cook_book = {}
-cook_book_new = {}
-new_list = {}
-name = ''
-new_name = ''
-index1 = 0
-index2 = 0
 
 def get_shop_list_by_dishes(name, person_count):
     cook_book_new = {}
@@ -57,53 +52,32 @@ get_shop_list_by_dishes ([ 'Омлет', 'Омлет' ], 2)
 def sort_file(directoria):
     print("Текущая деректория:", directoria)
     list_txt = []
-    r_file_txt1 = open('1.txt', 'rb').read().splitlines()
-    r_file_txt1_index = 0
-    min_len = len(r_file_txt1)
+    list_txt_new = []
+    min_len = 0
     for filename in glob.glob('*txt'):
         list_txt.append(filename)
+        # print(filename)
     print('До сортировки файлов по количеству строк:', list_txt)
-
+    sort_txt = {}
     for name_txt in range(0, len(list_txt)):
         txt = []
-        file_path = os.path.join(os.getcwd(), list_txt[name_txt])
         r_file = open(list_txt[name_txt], 'rb').read().splitlines()
-        if len(r_file) < min_len:
-            txt.append(list_txt[r_file_txt1_index])
-            list_txt[r_file_txt1_index] = list_txt[name_txt]
-            list_txt[name_txt] = txt[0]
+        sort_txt[list_txt[name_txt]] = len(r_file)
+    number_sort = sorted(sort_txt.values())
+    for number in range(len(sort_txt)):
+        for key, value in sort_txt.items():
+            if number_sort[number] == value:
+                list_txt_new.append(key)
+    for number in range(len(sort_txt)):
         with open('data_3.txt', 'a', encoding='UTF-8') as f:
-            f.write(f'{list_txt[name_txt]}\n')
-            f.write(f'''{str(len(open(list_txt[name_txt], 'rb').read().splitlines()))}\n''')
-            with open(list_txt[name_txt], encoding='utf-8') as file:
+            f.write(f'{list_txt_new[number]}\n')
+            f.write(f'''{str(len(open(list_txt_new[number], 'rb').read().splitlines()))}\n''')
+            with open(list_txt_new[number], encoding='utf-8') as file:
                 for line in file:
                     f.write(f'{line.strip()}\n')
-    print('После сортировки файлов по количеству строк:', list_txt)
+    print('После сортировки файлов по количеству строк:', list_txt_new)
 
-
-sort_file(os.getcwd())
-
-# print("Текущая деректория:", os.getcwd())
-# list_txt = []
-# r_file_txt1 = open('1.txt', 'rb').read().splitlines()
-# r_file_txt1_index = 0
-# min_len = len(r_file_txt1)
-# for filename in glob.glob('*txt'):
-#     list_txt.append(filename)
-# print('До сортировки файлов по количеству строк:', list_txt)
-# for name_txt in range(0, len(list_txt)):
-#     txt = []
-#     file_path = os.path.join(os.getcwd(), list_txt[name_txt])
-#     r_file = open(list_txt[name_txt], 'rb').read().splitlines()
-#     if len(r_file) < min_len:
-#         txt.append(list_txt[r_file_txt1_index])
-#         list_txt[r_file_txt1_index] = list_txt[name_txt]
-#         list_txt[name_txt] = txt[0]
-# print('После сортировки файлов по количеству строк:',list_txt)
-# for name_txt in range(0, len(list_txt)):
-#     print(list_txt[name_txt])
-#     print(len(open(list_txt[name_txt], 'rb').read().splitlines()))
-#     with open(list_txt[name_txt], encoding='utf-8') as file:
-#         for line in file:
-#             print(line.strip())
+directoria = 'D:\саша\работа\нетология\file'
+sort_file(directoria)
+# sort_file(os.getcwd()) для получения директории автоматически, там где сама программа
 
